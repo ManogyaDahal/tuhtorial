@@ -1,0 +1,34 @@
+syntax = "proto3";
+package kitchen;
+
+option go_package = "ManogyaDahal/oms/common/kitchen";
+
+service KitchenService {
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {}
+  rpc GetOrders(GetOrderRequest) returns (GetOrderResponse) {}
+}
+
+message CreateOrderRequest {
+  int32 customerId = 1;
+  int32 productId = 2;
+  int32 quantity = 3;
+}
+
+message CreateOrderResponse {
+  string status = 1;
+}
+
+message GetOrderRequest {
+  int32 customerId = 1;
+}
+
+message GetOrderResponse {
+  repeated Order orders = 1;
+}
+
+message Order {
+  int32 orderId = 1;
+  int32 customerId = 2;
+  int32 productId = 3;
+  int32 quantity = 4;
+}
