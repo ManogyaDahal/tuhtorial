@@ -1,2 +1,3 @@
 # Calculator
-don't know why it exists
+Mode of communication is GRPC. \
+link: [video](https://github.com/ManogyaDahal/tuhtorial)
