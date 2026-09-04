@@ -1,0 +1,24 @@
+syntax = "proto3";
+package calculator; 
+
+option go_package = "./proto/gen/calculator;gen_calculator";
+
+service Calculator{ 
+  rpc AddNumber(InputNumReq) returns (OutNumResp);
+  rpc SubNumber(InputNumReq) returns (OutNumResp);
+  rpc MulNumber(InputTwoNumReq) returns (OutNumResp);
+  rpc DivNumber(InputTwoNumReq) returns (OutNumResp);
+}
+
+message InputNumReq{
+  repeated int64 InputNum = 1;
+}
+
+message OutNumResp{ 
+  int64 Out = 1; 
+}
+
+message InputTwoNumReq { 
+  int64 Input_A = 1; 
+  int64 Input_B = 2; 
+}
