@@ -2,50 +2,32 @@ package handler
 
 import (
 	"context"
+
 	pb "ManogyaDahal/server/proto/gen/calculator"
+	"ManogyaDahal/server/services/calculator/service"
 )
 
-
-type GrpcCalculatorHandler struct { 
-	pb.UnimplementedCalculatorServer	
+type GrpcCalculatorHandler struct {
+	pb.UnimplementedCalculatorServer
+	svc service.CalculatorService
 }
 
-func NewGrpcHandlers() *GrpcCalculatorHandler { 
-	return &GrpcCalculatorHandler{}
+func NewGrpcHandlers(svc service.CalculatorService) *GrpcCalculatorHandler {
+	return &GrpcCalculatorHandler{svc: svc}
 }
 
-// Provide sum of numbers
-func (h *GrpcCalculatorHandler) AddNumber (ctx context.Context, req *pb.InputNumReq) (*pb.OutNumResp, error) {
-	var sum int64 = 0
-	for _, value := range req.InputNum{ 
-		sum = sum + value
-	}
-	return &pb.OutNumResp{
-		Out: sum,
-	}, nil
+func (h *GrpcCalculatorHandler) AddNumber(ctx context.Context, req *pb.InputNumReq) (*pb.OutNumResp, error) {
+	return h.svc.AddNumber(ctx, req)
 }
 
-// provides multiplication of numbers
-func (h *GrpcCalculatorHandler) MulNumber(ctx context.Context, req *pb.InputNumReq) (*pb.OutNumResp, error) {
-	var mul int64 = 1
-	for _, value := range req.InputNum{ 
-		mul = mul * value
-	}
-	return &pb.OutNumResp{
-		Out: mul,
-	}, nil
+func (h *GrpcCalculatorHandler) MulNumber(ctx context.Context, req *pb.InputTwoNumReq) (*pb.OutNumResp, error) {
+	return h.svc.MulNumber(ctx, req)
 }
 
-// Subtracts between two numbers
-func (h *GrpcCalculatorHandler) SubNumber(ctx context.Context, req *pb.InputTwoNumReq) (*pb.OutNumResp, error) {
-	return &pb.OutNumResp{
-		Out: req.Input_A - req.Input_B,
-	}, nil
+func (h *GrpcCalculatorHandler) SubNumber(ctx context.Context, req *pb.InputNumReq) (*pb.OutNumResp, error) {
+	return h.svc.SubNumber(ctx, req)
 }
 
-// Divides between two numbers
 func (h *GrpcCalculatorHandler) DivNumber(ctx context.Context, req *pb.InputTwoNumReq) (*pb.OutNumResp, error) {
-	return &pb.OutNumResp{
-		Out: req.Input_A / req.Input_B,
-	}, nil
+	return h.svc.DivNumber(ctx, req)
 }

@@ -4,31 +4,31 @@ import (
 	"log"
 	"net"
 
+	pb "ManogyaDahal/server/proto/gen/calculator"
+	"ManogyaDahal/server/services/calculator/handler"
+
 	"google.golang.org/grpc"
 )
 
 type GrpcServer struct {
-	addr string
+	addr     string
+	handlers *handler.GrpcCalculatorHandler
 }
 
-// Used to initialize a new Grpc Server.
-// Includes Run function to runn the server
-// from the main funciton
-func NewGrpcServer(addr string) *GrpcServer {
+func NewGrpcServer(addr string, handlers *handler.GrpcCalculatorHandler) *GrpcServer {
 	return &GrpcServer{
-		addr: addr,
+		addr:     addr,
+		handlers: handlers,
 	}
 }
 
-// Responsible for running the server
 func (s *GrpcServer) Run() error {
 	listener, err := net.Listen("tcp", s.addr)
 	if err != nil {
 		log.Fatal("Error occured while listening", err)
 	}
 	grpcServer := grpc.NewServer()
-	log.Println("GrpcServer is running on ",s.addr)
-	// defining the service
-
+	pb.RegisterCalculatorServer(grpcServer, s.handlers)
+	log.Println("GrpcServer is running on ", s.addr)
 	return grpcServer.Serve(listener)
 }
