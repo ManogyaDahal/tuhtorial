@@ -1,0 +1,26 @@
+syntax = "proto3";
+package mainpb;
+
+option go_package="./proto/gen;genpb";
+
+
+service Fibonacci{ 
+  rpc GenerateFibonacci(FibonacciRequest) returns (stream FibonacciResponse); 
+  rpc SendNumbers(stream NumberRequest) returns (FibonacciResponse); 
+}
+
+message NumberRequest { 
+  int32 Number = 1; 
+}
+
+message NumberResponse{ 
+  int32 Sum = 1; 
+}
+
+message FibonacciRequest{ 
+  int32 N = 1; 
+}
+
+message FibonacciResponse { 
+  int32 Num = 1;
+}
